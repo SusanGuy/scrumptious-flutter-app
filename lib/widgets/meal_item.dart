@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scrumptious/models/meal.dart';
+import 'package:scrumptious/screens/meal_details.dart';
 
 class MealItem extends StatelessWidget {
+  final String id;
   final String imageUrl;
   final String title;
   final int duration;
@@ -9,7 +11,8 @@ class MealItem extends StatelessWidget {
   final Affordability affordability;
 
   MealItem(
-      {@required this.imageUrl,
+      {@required this.id,
+      @required this.imageUrl,
       @required this.title,
       @required this.duration,
       @required this.complexity,
@@ -47,12 +50,14 @@ class MealItem extends StatelessWidget {
     }
   }
 
-  void selectMeal() {}
+  void selectMeal(BuildContext ctx) {
+    Navigator.of(ctx).pushNamed(MealDetailsScreen.routeName, arguments: id);
+  }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: selectMeal,
+      onTap: () => selectMeal(context),
       child: Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

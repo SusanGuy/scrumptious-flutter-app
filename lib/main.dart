@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scrumptious/screens/categories_screen.dart';
 import 'package:scrumptious/screens/category_meals_screen.dart';
+import 'package:scrumptious/screens/meal_details.dart';
+import 'package:scrumptious/screens/tabs_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,9 +26,12 @@ class MyApp extends StatelessWidget {
                   fontSize: 20,
                   fontFamily: 'RobotoCondensed',
                   fontWeight: FontWeight.bold))),
-      home: CategoriesScreen(),
+      // home: CategoriesScreen(),
+      initialRoute: "/",
       routes: {
+        "/": (ctx) => TabsScreen(),
         CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
+        MealDetailsScreen.routeName: (ctx) => MealDetailsScreen(),
       },
     );
   }
