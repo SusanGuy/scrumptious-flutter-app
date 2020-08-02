@@ -1,29 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:scrumptious/models/meal.dart';
 import 'package:scrumptious/widgets/meal_item.dart';
 import '../dummy_data.dart';
 
-class CategoryMealsScreen extends StatelessWidget {
+class CategoryMealsScreen extends StatefulWidget {
   static const routeName = "/category-meals";
 
   @override
-  Widget build(BuildContext context) {
-    final routeArgs =
+  _CategoryMealsScreenState createState() => _CategoryMealsScreenState();
+}
+
+class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
+  Map<String, String> routeArgs;
+  List<Meal> displayedMeals;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, String>;
-    final categoryMeals = DUMMY_MEALS
+    displayedMeals = DUMMY_MEALS
         .where((meal) => meal.categories.contains(routeArgs['id']))
         .toList();
+  }
+
+  void _removeMeal(String mealId) {
+    setState(() {
+      displayedMeals.removeWhere((element) => element.id == mealId);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
           itemBuilder: (ctx, i) {
             return MealItem(
-                id: categoryMeals[i].id,
-                imageUrl: categoryMeals[i].imageUrl,
-                title: categoryMeals[i].title,
-                duration: categoryMeals[i].duration,
-                complexity: categoryMeals[i].complexity,
-                affordability: categoryMeals[i].affordability);
+                id: displayedMeals[i].id,
+                imageUrl: displayedMeals[i].imageUrl,
+                title: displayedMeals[i].title,
+                duration: displayedMeals[i].duration,
+                complexity: displayedMeals[i].complexity,
+                affordability: displayedMeals[i].affordability,
+                removeItem: _removeMeal);
           },
-          itemCount: categoryMeals.length),
+          itemCount: displayedMeals.length),
       appBar: AppBar(title: Text(routeArgs['title'])),
     );
   }
