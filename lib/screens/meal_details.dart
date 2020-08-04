@@ -3,6 +3,9 @@ import 'package:scrumptious/dummy_data.dart';
 
 class MealDetailsScreen extends StatelessWidget {
   static const routeName = "/meal-detail";
+  final Function toggleFavorite;
+  final Function isFavorite;
+  MealDetailsScreen(this.toggleFavorite, this.isFavorite);
 
   Widget buildSectionTitle(BuildContext context, String text) {
     return Container(
@@ -33,52 +36,52 @@ class MealDetailsScreen extends StatelessWidget {
     final selectedMeal =
         DUMMY_MEALS.firstWhere((element) => element.id == mealId);
     return Scaffold(
-        appBar: AppBar(title: Text('${selectedMeal.title}')),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                  height: 300,
-                  width: double.infinity,
-                  child: Image.network(
-                    selectedMeal.imageUrl,
-                    fit: BoxFit.cover,
-                  )),
-              buildSectionTitle(context, "Ingredients"),
-              buildContainer(ListView.builder(
-                itemBuilder: (ctx, i) {
-                  return Card(
-                      color: Theme.of(context).accentColor,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
-                        child: Text(selectedMeal.ingredients[i]),
-                      ));
-                },
-                itemCount: selectedMeal.ingredients.length,
-              )),
-              buildSectionTitle(context, "Steps"),
-              buildContainer(ListView.builder(
-                itemBuilder: (ctx, index) {
-                  return Column(
-                    children: <Widget>[
-                      ListTile(
-                        leading: CircleAvatar(child: Text('# ${index + 1}')),
-                        title: Text(selectedMeal.steps[index]),
-                      ),
-                      Divider(),
-                    ],
-                  );
-                },
-                itemCount: selectedMeal.steps.length,
-              )),
-            ],
-          ),
+      appBar: AppBar(title: Text('${selectedMeal.title}')),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+                height: 300,
+                width: double.infinity,
+                child: Image.network(
+                  selectedMeal.imageUrl,
+                  fit: BoxFit.cover,
+                )),
+            buildSectionTitle(context, "Ingredients"),
+            buildContainer(ListView.builder(
+              itemBuilder: (ctx, i) {
+                return Card(
+                    color: Theme.of(context).accentColor,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 10),
+                      child: Text(selectedMeal.ingredients[i]),
+                    ));
+              },
+              itemCount: selectedMeal.ingredients.length,
+            )),
+            buildSectionTitle(context, "Steps"),
+            buildContainer(ListView.builder(
+              itemBuilder: (ctx, index) {
+                return Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: CircleAvatar(child: Text('# ${index + 1}')),
+                      title: Text(selectedMeal.steps[index]),
+                    ),
+                    Divider(),
+                  ],
+                );
+              },
+              itemCount: selectedMeal.steps.length,
+            )),
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.delete),
-            onPressed: () {
-              Navigator.of(context).pop(mealId);
-            }));
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(this.isFavorite(mealId) ? Icons.star : Icons.star_border),
+        onPressed: () => this.toggleFavorite(mealId),
+      ),
+    );
   }
 }
